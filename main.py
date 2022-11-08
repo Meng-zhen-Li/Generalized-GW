@@ -10,7 +10,7 @@ from scipy.sparse import csr_matrix
 
 def main():
 	
-	parser = argparse.ArgumentParser(description='Process some integers.')
+	parser = argparse.ArgumentParser(description='Process some arguments.')
 	parser.add_argument('filename', type=str, help='filename of the input data')
 	parser.add_argument('--output', type=str, default='data/result.mat', help='filename of the output')
 	parser.add_argument('--preprocess', type=bool, default=False, help='whether or not preprocess')
