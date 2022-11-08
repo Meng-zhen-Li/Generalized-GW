@@ -20,10 +20,7 @@ def main():
 	
 	if args.preprocess:
 		data = list(data.values())
-		if len(data) == 6:
-			pair = process_pairs(data[-3], data[-2], Y=data[-1])
-		else:
-			pair = process_pairs(data[-2], data[-1])
+		pair = process_pairs(data[-2], data[-1])
 	else:
 		pair = {'C1': data['C1'], 'C2': data['C2'], 'num_overlap': int(data['num_overlap'][0][0])}
 
@@ -41,19 +38,7 @@ def main():
 	B1 = C1[idx, :][:, idx1]
 	B2 = C2[idx, :][:, idx2]
 	
-	if 'Y' in pair:
-		Y = pair['Y']
-		Y1 = Y[:num_overlap]
-		Y2 = Y[num_overlap:num_overlap + D1.shape[0]].transpose()
-		Y3 = Y[num_overlap + D1.shape[0]:].transpose()
-		N1 = np.dot(Y1, Y2)
-		N2 = np.dot(Y1, Y3)
-	else:
-		Y2 = None
-		Y3 = None
-		N1 = None
-		N2 = None
-	gw, log = gromov.gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap, N1=N1, N2=N2, 
+	gw, log = gromov.gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap,
 		Y2=Y2, Y3=Y3, verbose=True, log=True)	
 	savemat(args.output, {'gw': gw})
 
