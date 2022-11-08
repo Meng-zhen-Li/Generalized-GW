@@ -38,8 +38,7 @@ def main():
 	B1 = C1[idx, :][:, idx1]
 	B2 = C2[idx, :][:, idx2]
 	
-	gw, log = gromov.gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap,
-		Y2=Y2, Y3=Y3, verbose=True, log=True)	
+	gw, log = gromov.gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap, verbose=True, log=True)	
 	savemat(args.output, {'gw': gw})
 
 if __name__ == "__main__":
