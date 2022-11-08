@@ -1,5 +1,5 @@
 # Generalized-GW
-This is an implementation of the generalized Gromov-Wasserstein algorithm. The generalized GW is a supervised network alignment method, and it introduces a loss function based on the topological similarity as well as their relations with the known matching nodes. The code also outputs the optimal transport of GW as a baseline.
+This is an implementation of the generalized Gromov-Wasserstein algorithm. The generalized GW is a supervised network alignment method, and it introduces a loss function based on the topological similarity as well as their relations with the known matching nodes.
 
 ## Input Data
 The input data of generalized GW should be the adjacency matrices of the pair of networks to be aligned, and the known overlaps between them. The data(adjacency matrices and num_overlap) should be saved in one .mat file, with the two adjacency matrices and the number of overlaps. Two types of input files can be accepted:
@@ -15,9 +15,9 @@ python main.py data/input.mat
 ```
 - The output files are optional, but can be indicated:
 ```
-python main.py data/input.mat --output1 data/output1.mat --output2 data/output2.mat
+python main.py data/input.mat --output data/output.mat
 ```
-in which `output1` is the optimal transport of generalized GW and `output2` is the optimal transport of GW.
+in which `--output` is the optimal transport of generalized GW.
 - Non-preprocessed input data(second type of input) should be preprocessed:
 ```
 python main.py data/input.mat --preprocess true
