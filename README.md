@@ -20,7 +20,7 @@ python main.py data/input.mat --output data/output.mat
 in which `--output` is the optimal transport of generalized GW.
 - Non-preprocessed input data(second type of input) should be preprocessed:
 ```
-python main.py data/input.mat --preprocess true
+python main.py data/input.mat --preprocess True
 ```
 ## Output Data
 The output data are .mat files with the optimal transport matrix. The matrices can be used as network alignment scores. The matlab function `greedy_matching.m` file can be used to align the two networks based on the optimal transport.
