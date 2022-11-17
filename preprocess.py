@@ -3,7 +3,7 @@ import networkx as nx
 from scipy.sparse import csr_matrix
 from scipy.io import loadmat, savemat
 
-def process_pairs(C1, C2, Y=None):
+def process_pairs(C1, C2):
 	
 	pair = {'C1': C1, 'C2': C2, 'num_overlap': 0}
 	num_nodes = C1.shape[0]
@@ -37,15 +37,6 @@ def process_pairs(C1, C2, Y=None):
 	
 	pair['C1'] = C1
 	pair['C2'] = C2
-	
-	if Y is not None:
-		idx = np.array(Y.nonzero())
-		Y1 = np.array([[node_mapping1[idx[0, x]], idx[1, x] + 1] for x in range(len(idx[0])) if idx[0, x] in node_mapping1])
-		Y2 = np.array([[node_mapping2[idx[0, x]], idx[1, x] + 1] for x in range(len(idx[0])) if idx[0, x] in node_mapping2])
-		
-		Y = np.append(Y1, Y2, axis=0)
-		Y = csr_matrix((np.ones(len(Y[:, 0])), (Y[:, 0], Y[:, 1] - 1)), shape=(C1.shape[0] + C2.shape[0] - len(overlap), np.max(Y[:, 1])))
-		pair['Y'] = Y
 		
 	print('preprocess finished!')
 	
