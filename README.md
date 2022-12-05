@@ -18,6 +18,10 @@ python main.py data/input.mat
 python main.py data/input.mat --output data/output.mat
 ```
 in which `--output` is the optimal transport of generalized GW.
+- The decay factor alpha(default is 0.5):
+```
+python main.py data/input.mat --alpha 0.2
+```
 - Non-preprocessed input data(second type of input) should be preprocessed:
 ```
 python main.py data/input.mat --preprocess True
