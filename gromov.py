@@ -45,23 +45,23 @@ def new_loss(B1, B2, T, num_overlap):
 	
 	return Eb1 + Eb2 + Eb3
 
-def gwloss(constC, hC1, hC2, Eb, T):
+def gwloss(constC, hC1, hC2, Eb, T, alpha):
 	tens = tensor_product(constC, hC1, hC2, T)
 	
 	square = T.multiply(T)
 	
 	Eb = Eb.multiply(square)
 
-	return (tens.multiply(T) + Eb).sum()
+	return ((1 - alpha) * tens.multiply(T) + alpha * Eb).sum()
 	
 
 
-def gwggrad(constC, hC1, hC2, Eb, T):
-	L = tensor_product(constC, hC1, hC2, T) + Eb.multiply(T)
+def gwggrad(constC, hC1, hC2, Eb, T, alpha):
+	L = (1 - alpha) * tensor_product(constC, hC1, hC2, T) + alpha * Eb.multiply(T)
 	return 2 * L
 
 
-def gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap, log=False, **kwargs):
+def gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap, alpha=0.5, log=False, **kwargs):
 	constC, hC1, hC2 = init_matrix(D1, D2, p, q)
 	
 	G0 = csr_matrix(p[:, None] * q[None, :])
@@ -70,14 +70,14 @@ def gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap, log=False, **kwargs):
 
 
 	def f(G):
-		return gwloss(constC, hC1, hC2, Eb, G)
+		return gwloss(constC, hC1, hC2, Eb, G, alpha)
 
 	def df(G):
-		return gwggrad(constC, hC1, hC2, Eb, G)
+		return gwggrad(constC, hC1, hC2, Eb, G, alpha)
 
 	if log:
-		res, log = cg(p, q, f, df, G0, num_overlap, log=True, D1=D1, D2=D2, Eb=Eb, constC=constC, **kwargs)
-		log['gw_dist'] = gwloss(constC, hC1, hC2, Eb, res)
+		res, log = cg(p, q, f, df, G0, num_overlap, log=True, D1=D1, D2=D2, Eb=Eb, constC=constC, alpha=alpha, **kwargs)
+		log['gw_dist'] = gwloss(constC, hC1, hC2, Eb, res, alpha)
 		log['u'] = log['u']
 		log['v'] = log['v']
 		return res, log

@@ -14,12 +14,12 @@ from scipy.sparse import csr_matrix, eye
 from scipy.optimize import fminbound
 
 
-def solve_linesearch(cost, G, deltaG, f_val, D1=None, D2=None, Eb=None, constC=None, tau_min=None, tau_max=None):
+def solve_linesearch(cost, G, deltaG, f_val, D1=None, D2=None, Eb=None, constC=None, alpha=None, tau_min=None, tau_max=None):
 	
 	# dot = np.dot(np.dot(D1, deltaG), D2)
 	dot = csr_matrix(D1.dot(deltaG).dot(D2))
-	a = -2 * dot.multiply(deltaG).sum() + Eb.multiply(deltaG).multiply(deltaG).sum()
-	b = csr_matrix(constC).multiply(deltaG).sum() - 2 * (dot.multiply(G).sum() + D1.dot(G).dot(D2).multiply(deltaG).sum()) + 2 * Eb.multiply(G).multiply(deltaG).sum()
+	a = -(1 - alpha) * 2 * dot.multiply(deltaG).sum() + alpha * Eb.multiply(deltaG).multiply(deltaG).sum()
+	b = (1 - alpha) * csr_matrix(constC).multiply(deltaG).sum() - (1 - alpha) * 2 * (dot.multiply(G).sum() + D1.dot(G).dot(D2).multiply(deltaG).sum()) + alpha * 2 * Eb.multiply(G).multiply(deltaG).sum()
 	c = cost(G)
 
 	tau = solve_1d_linesearch_quad(a, b, c)
@@ -30,7 +30,7 @@ def solve_linesearch(cost, G, deltaG, f_val, D1=None, D2=None, Eb=None, constC=N
 	return tau, f_val
 
 
-def cg(a, b, f, df, G0=None, num_overlap=0, numItermax=250, numItermaxEmd=2000000,
+def cg(a, b, f, df, G0=None, num_overlap=0, numItermax=300, numItermaxEmd=5000000,
 	   stopThr=1e-10, stopThr2=1e-10, verbose=False, log=False, **kwargs):
 	loop = 1
 	

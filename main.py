@@ -14,9 +14,11 @@ def main():
 	parser.add_argument('filename', type=str, help='filename of the input data')
 	parser.add_argument('--output', type=str, default='data/result.mat', help='filename of the output')
 	parser.add_argument('--preprocess', type=bool, default=False, help='whether or not preprocess')
+	parser.add_argument('--alpha', type=float, default=0.5, help="decay parameter")
 	args = parser.parse_args()
 	
 	data = loadmat(args.filename)
+	alpha = args.alpha
 	
 	if args.preprocess:
 		data = list(data.values())
@@ -38,7 +40,7 @@ def main():
 	B1 = C1[idx, :][:, idx1]
 	B2 = C2[idx, :][:, idx2]
 	
-	gw, log = gromov.gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap, verbose=True, log=True)	
+	gw, log = gromov.gromov_wasserstein(D1, D2, B1, B2, p, q, num_overlap, alpha=alpha, verbose=True, log=True)	
 	savemat(args.output, {'gw': gw})
 
 if __name__ == "__main__":
